@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import './App.css';
+import Header from './components/header';
+import Input from './components/input';
+import History from './components/history';
 
 class App extends Component {
+  state = {
+    tasks: [],
+  }
+
+  addItem = (item) => {
+    this.setState((prevState) => ({
+      tasks: [...prevState.tasks, item ],
+    }));
+  }
+
   render() {
     return (
       <div className="App">
-        <h1>TODAY I DID...</h1>
-        <p>
-          History<br/>
-          History<br/>
-          History<br/>
-          History<br/>
-          History<br/>
-          History<br/>
-          History<br/>
-        </p>
-        <input type='text' />
+        <Header text='DAILY LOG'/>
+        <History tasks={this.state.tasks}/>
+        <Input addItem={this.addItem}/>
       </div>
     );
   }
