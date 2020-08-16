@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import styled from "styled-components";
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
-  label{
+  label {
     font-size: 10px;
   }
 
-  input{
+  input {
     width: 100%;
     font-size: 14px;
     padding: 2px;
@@ -19,27 +19,33 @@ const Form = styled.form`
 
 export default class Input extends Component {
   state = {
-    value: ''
+    value: "",
   };
   handleChange = (event) => {
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
   };
 
   handleSubmit = (event) => {
     event.preventDefault(); // Prevent window refresh
-    const datetime = new Date().toLocaleString().split(', ');
-    const task = {value: this.state.value, date: datetime[0], time: datetime[1]};
-    // console.log(task);
+    const datetime = new Date().toLocaleString();
+    const task = {
+      value: this.state.value,
+      datetime: datetime,
+    };
     this.props.addItem(task);
-    this.setState({value: ''});
+    this.setState({ value: "" });
   };
 
   render() {
     return (
       <Form onSubmit={this.handleSubmit}>
         <label htmlFor='itemInput'>Today I Did:</label>
-        <input id='itemInput' value={this.state.value} onChange={this.handleChange}/>
+        <input
+          id='itemInput'
+          value={this.state.value}
+          onChange={this.handleChange}
+        />
       </Form>
-    )
+    );
   }
 }
