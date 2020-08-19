@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Container } from "./container";
 import styled from "styled-components";
 import { getAllTasks } from "../services/Firestore";
-
-const Container = styled.div`
-  border-bottom: 0.5px solid black;
-  text-align: left;
-  margin: 16px;
-  padding: 0 8px;
-  box-sizing: border-box;
-`;
 
 const Previously = styled.h2`
   margin-top: 0;

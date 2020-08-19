@@ -5,6 +5,8 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding: 50px;
+  padding-top: 0px;
 
   label {
     font-size: 10px;

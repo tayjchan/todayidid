@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { Container } from "./container";
 
 const Box = styled.ul`
   text-align: left;
@@ -14,6 +15,10 @@ export default class History extends Component {
         </li>
       );
     });
-    return <Box>{taskList}</Box>;
+    return (
+      <Container style={{ borderBottom: "none", paddingBottom: 0 }}>
+        <Box>{taskList}</Box>
+      </Container>
+    );
   }
 }
