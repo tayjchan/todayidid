@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container } from "./container";
 import styled from "styled-components";
 import { getAllTasks } from "../services/Firestore";
+import Loader from "./loader";
 
 const Previously = styled.h2`
   margin-top: 0;
@@ -9,12 +10,19 @@ const Previously = styled.h2`
   font-weight: 500;
 `;
 
-const Summary = () => {
+const Summary = ({ clearCurrentTasks }) => {
   const [savedTasks, setSavedTasks] = useState([]);
+  const [loader, setLoader] = useState(false);
   useEffect(() => {
     async function fetchData() {
-      const tasks = await getAllTasks();
-      setSavedTasks(tasks);
+      setLoader(true);
+      let tasks = await getAllTasks();
+      const sorted = [...tasks].sort((a, b) =>
+        new Date(a.time) < new Date(b.time) ? -1 : 1
+      );
+      setSavedTasks(sorted);
+      clearCurrentTasks();
+      setLoader(false);
     }
     fetchData();
   }, []);
@@ -31,6 +39,7 @@ const Summary = () => {
           );
         })}
       </ul>
+      {loader && <Loader />}
     </Container>
   );
 };

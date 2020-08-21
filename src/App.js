@@ -28,6 +28,12 @@ class App extends Component {
     addTask(item);
   };
 
+  clearCurrentTasks = () => {
+    this.setState({
+      tasks: [],
+    });
+  };
+
   render() {
     return (
       <div className='App'>
@@ -40,7 +46,7 @@ class App extends Component {
         />
         {this.state.currentUser ? (
           <>
-            <Summary />
+            <Summary clearCurrentTasks={this.clearCurrentTasks} />
             <Main>
               <History tasks={this.state.tasks} />
               <Input addItem={this.addItem} />
