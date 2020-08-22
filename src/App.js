@@ -5,7 +5,7 @@ import { addTask } from "./services/Firestore";
 
 import Header from "./components/header";
 import Input from "./components/input";
-import History from "./components/history";
+import Current from "./components/current";
 import Summary from "./components/summary";
 import SignIn from "./components/signIn";
 
@@ -48,7 +48,7 @@ class App extends Component {
           <>
             <Summary clearCurrentTasks={this.clearCurrentTasks} />
             <Main>
-              <History tasks={this.state.tasks} />
+              <Current tasks={this.state.tasks} />
               <Input addItem={this.addItem} />
             </Main>
           </>

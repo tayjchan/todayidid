@@ -9,7 +9,7 @@ const SignIn = ({ currentUser, updateUser }) => {
     });
   }, []);
   return (
-    <Container>
+    <Container style={{ marginTop: 0, marginBottom: 0 }}>
       {currentUser ? (
         <button type='button' onClick={signOut}>
           SIGN OUT

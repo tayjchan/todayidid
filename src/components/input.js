@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { findTags, removeTags } from "../utils/string";
 
 const Form = styled.form`
   display: flex;
@@ -23,6 +24,7 @@ export default class Input extends Component {
   state = {
     value: "",
   };
+
   handleChange = (event) => {
     this.setState({ value: event.target.value });
   };
@@ -30,9 +32,13 @@ export default class Input extends Component {
   handleSubmit = (event) => {
     event.preventDefault(); // Prevent window refresh
     const datetime = new Date().toLocaleString();
+    const tags = findTags(this.state.value);
+    const trimmedTags = tags.map((tag) => tag.trim());
+    const text = removeTags(this.state.value, tags);
     const task = {
-      value: this.state.value,
+      value: text,
       datetime: datetime,
+      tags: trimmedTags,
     };
     this.props.addItem(task);
     this.setState({ value: "" });

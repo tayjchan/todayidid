@@ -32,6 +32,7 @@ async function addTask(task) {
     .add({
       description: task.value,
       time: task.datetime,
+      tags: task.tags,
     })
     .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);

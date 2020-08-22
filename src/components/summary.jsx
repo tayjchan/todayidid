@@ -3,11 +3,17 @@ import { Container } from "./container";
 import styled from "styled-components";
 import { getAllTasks } from "../services/Firestore";
 import Loader from "./loader";
+import Tag from "./tag";
 
 const Previously = styled.h2`
   margin-top: 0;
   font-size: 16px;
   font-weight: 500;
+`;
+
+const PreviouslyTasks = styled.ul`
+  max-height: 200px;
+  overflow: auto;
 `;
 
 const Summary = ({ clearCurrentTasks }) => {
@@ -17,9 +23,17 @@ const Summary = ({ clearCurrentTasks }) => {
     async function fetchData() {
       setLoader(true);
       let tasks = await getAllTasks();
-      const sorted = [...tasks].sort((a, b) =>
-        new Date(a.time) < new Date(b.time) ? -1 : 1
+      let sorted = [...tasks].sort((a, b) =>
+        new Date(a.time) > new Date(b.time) ? -1 : 1
       );
+      let today = new Date();
+      today.setMonth(today.getMonth() - 1);
+
+      const index = sorted.findIndex((value) => new Date(value.time) < today);
+      if (index !== -1) {
+        sorted = sorted.slice(0, index);
+      }
+
       setSavedTasks(sorted);
       clearCurrentTasks();
       setLoader(false);
@@ -30,15 +44,18 @@ const Summary = ({ clearCurrentTasks }) => {
   return (
     <Container>
       <Previously>Previously</Previously>
-      <ul>
+      <PreviouslyTasks>
         {savedTasks.map((task) => {
           return (
             <li key={task.id}>
-              {task.time}: {task.description}
+              {task.time}: {` `}
+              {task.tags &&
+                task.tags.map((tag) => <Tag text={tag} color='lightpink' />)}
+              {task.description}
             </li>
           );
         })}
-      </ul>
+      </PreviouslyTasks>
       {loader && <Loader />}
     </Container>
   );
