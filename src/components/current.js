@@ -12,15 +12,21 @@ export default class Current extends Component {
     const taskList = this.props.tasks.map((task, index) => {
       return (
         <li key={index}>
-          {task.datetime}: {` `}
+          <b>{`${task.datetime}: `}</b>
           {task.tags &&
-            task.tags.map((tag) => <Tag text={tag} color='lightpink' />)}
+            task.tags.map((tag) => (
+              <Tag
+                key={`current_${tag}_${index}`}
+                text={tag}
+                color='lightpink'
+              />
+            ))}
           {task.value}
         </li>
       );
     });
     return (
-      <Container style={{ borderBottom: "none", paddingBottom: 0 }}>
+      <Container style={{ borderBottom: "none" }}>
         <Box>{taskList}</Box>
       </Container>
     );

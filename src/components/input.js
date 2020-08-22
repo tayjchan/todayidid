@@ -9,14 +9,19 @@ const Form = styled.form`
   padding: 50px;
   padding-top: 0px;
 
-  label {
-    font-size: 10px;
+  div {
+    display: flex;
+    width: 100%;
   }
 
   input {
     width: 100%;
     font-size: 14px;
     padding: 2px;
+  }
+
+  button {
+    font-size: 10px;
   }
 `;
 
@@ -48,11 +53,16 @@ export default class Input extends Component {
     return (
       <Form onSubmit={this.handleSubmit}>
         <label htmlFor='itemInput'>Today I Did:</label>
-        <input
-          id='itemInput'
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
+        <div>
+          <input
+            id='itemInput'
+            type='text'
+            autoComplete='off'
+            value={this.state.value}
+            onChange={this.handleChange}
+          />
+          <button type='submit'>SUBMIT</button>
+        </div>
       </Form>
     );
   }

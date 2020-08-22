@@ -48,9 +48,15 @@ const Summary = ({ clearCurrentTasks }) => {
         {savedTasks.map((task) => {
           return (
             <li key={task.id}>
-              {task.time}: {` `}
+              <b>{`${task.time}: `}</b>
               {task.tags &&
-                task.tags.map((tag) => <Tag text={tag} color='lightpink' />)}
+                task.tags.map((tag, index) => (
+                  <Tag
+                    key={`previously_${tag}_${index}`}
+                    text={tag}
+                    color='lightpink'
+                  />
+                ))}
               {task.description}
             </li>
           );

@@ -47,8 +47,9 @@ class App extends Component {
         {this.state.currentUser ? (
           <>
             <Summary clearCurrentTasks={this.clearCurrentTasks} />
+
+            <Current tasks={this.state.tasks} />
             <Main>
-              <Current tasks={this.state.tasks} />
               <Input addItem={this.addItem} />
             </Main>
           </>
