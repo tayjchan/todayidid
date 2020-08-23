@@ -18,10 +18,7 @@ const Form = styled.form`
     width: 100%;
     font-size: 14px;
     padding: 2px;
-  }
-
-  button {
-    font-size: 10px;
+    margin-right: 2px;
   }
 `;
 

@@ -26,7 +26,7 @@ export default class Current extends Component {
       );
     });
     return (
-      <Container style={{ borderBottom: "none" }}>
+      <Container style={{ borderBottom: "none", marginBottom: 100 }}>
         <Box>{taskList}</Box>
       </Container>
     );

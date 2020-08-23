@@ -10,10 +10,14 @@ import Summary from "./components/summary";
 import SignIn from "./components/signIn";
 
 const Main = styled.div`
-  position: absolute;
-  bottom: 30px;
+  position: fixed;
+  bottom: 0;
   width: 100%;
   box-sizing: border-box;
+  padding-top: 16px;
+  background-color: white;
+  z-index: 10;
+  height: 100px;
 `;
 class App extends Component {
   state = {
@@ -26,6 +30,10 @@ class App extends Component {
       tasks: [...prevState.tasks, item],
     }));
     addTask(item);
+
+    // Scroll to bottom so item is visible
+    // window.scrollTo(0, document.body.scrollHeight);
+    window.scrollTo(0, document.body.scrollHeight);
   };
 
   clearCurrentTasks = () => {
