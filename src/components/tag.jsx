@@ -11,6 +11,7 @@ const TagContainer = styled.div`
   text-transform: uppercase;
   font-weight: 600;
   border-radius: 16px;
+  cursor: pointer;
 `;
 
 const TagText = styled.span`
@@ -18,9 +19,9 @@ const TagText = styled.span`
   vertical-align: middle;
 `;
 
-const Tag = ({ text, color }) => {
+const Tag = ({ text, color, onClick }) => {
   return (
-    <TagContainer style={{ backgroundColor: color }}>
+    <TagContainer onClick={onClick} style={{ backgroundColor: color }}>
       <TagText>{text}</TagText>
     </TagContainer>
   );
