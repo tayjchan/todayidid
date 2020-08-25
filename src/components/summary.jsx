@@ -21,27 +21,17 @@ const PreviouslyTasks = styled.ul`
 const Summary = ({ clearCurrentTasks }) => {
   const [savedTasks, setSavedTasks] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [filter, setFilter] = useState();
+  const [filters, setFilters] = useState({});
 
   const filterCurrentTasks = (tag) => {
-    setFilter(tag);
-  };
-
-  const clearCurrentFilter = () => {
-    setFilter(null);
+    const updatedFilters = { ...filters, [tag]: !filters[tag] };
+    setFilters(updatedFilters);
   };
 
   const displayTasks = (savedTasks) => {
     let filteredTasks = [...savedTasks];
-    if (filter) {
-      filteredTasks = savedTasks.filter((savedTask) => {
-        if (!savedTask.tags) {
-          return false;
-        } else {
-          return savedTask.tags.includes(filter);
-        }
-      });
-    }
+
+    // TODO: Filter only enabled filters
 
     return filteredTasks.map((task) => {
       return (
@@ -69,15 +59,26 @@ const Summary = ({ clearCurrentTasks }) => {
       let sorted = [...tasks].sort((a, b) =>
         new Date(a.time) > new Date(b.time) ? -1 : 1
       );
+
+      // Only show tasks from the past month
       let today = new Date();
       today.setMonth(today.getMonth() - 1);
-
       const index = sorted.findIndex((value) => new Date(value.time) < today);
       if (index !== -1) {
         sorted = sorted.slice(0, index);
       }
 
+      const availableTags = {};
+      sorted.forEach((task) => {
+        if (task.tags) {
+          task.tags.forEach((taskTag) => {
+            availableTags[taskTag] = false;
+          });
+        }
+      });
+
       setSavedTasks(sorted);
+      setFilters(availableTags);
       clearCurrentTasks();
       setLoader(false);
     }
@@ -87,12 +88,16 @@ const Summary = ({ clearCurrentTasks }) => {
   return (
     <Container>
       <Previously>Previously</Previously>
-      {filter && (
-        <div>
-          <span>Filter: </span>
-          <Tag text={filter} color='lightpink' onClick={clearCurrentFilter} />
-        </div>
-      )}
+      <div>
+        <span>Filter: </span>
+        {Object.keys(filters).map((filter) => (
+          <Tag
+            text={filter}
+            disabled={!filters[filter]}
+            onClick={() => filterCurrentTasks(filter)}
+          />
+        ))}
+      </div>
       <PreviouslyTasks>{displayTasks(savedTasks)}</PreviouslyTasks>
       {loader && <Loader />}
     </Container>
