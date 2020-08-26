@@ -15,11 +15,7 @@ export default class Current extends Component {
           <b>{`${task.datetime}: `}</b>
           {task.tags &&
             task.tags.map((tag) => (
-              <Tag
-                key={`current_${tag}_${index}`}
-                text={tag}
-                color='lightpink'
-              />
+              <Tag key={`current_${tag}_${index}`} text={tag} disabled={true} />
             ))}
           {task.value}
         </li>

@@ -31,7 +31,17 @@ const Summary = ({ clearCurrentTasks }) => {
   const displayTasks = (savedTasks) => {
     let filteredTasks = [...savedTasks];
 
-    // TODO: Filter only enabled filters
+    const enabledTags = Object.keys(filters).filter((x) => filters[x]);
+    if (enabledTags.length > 0) {
+      filteredTasks = savedTasks.filter((savedTask) => {
+        if (!savedTask.tags) {
+          return false;
+        } else {
+          const enabledTags = Object.keys(filters).filter((x) => filters[x]);
+          return savedTask.tags.some((tag) => enabledTags.includes(tag));
+        }
+      });
+    }
 
     return filteredTasks.map((task) => {
       return (
@@ -42,8 +52,8 @@ const Summary = ({ clearCurrentTasks }) => {
               <Tag
                 key={`previously_${tag}_${index}`}
                 text={tag}
-                color='lightpink'
                 onClick={() => filterCurrentTasks(tag)}
+                active={enabledTags.length !== 0}
               />
             ))}
           {task.description}
@@ -89,11 +99,12 @@ const Summary = ({ clearCurrentTasks }) => {
     <Container>
       <Previously>Previously</Previously>
       <div>
-        <span>Filter: </span>
-        {Object.keys(filters).map((filter) => (
+        <span>Filters: </span>
+        {Object.keys(filters).map((filter, index) => (
           <Tag
+            key={`filters_${filter}_${index}`}
             text={filter}
-            disabled={!filters[filter]}
+            active={filters[filter]}
             onClick={() => filterCurrentTasks(filter)}
           />
         ))}

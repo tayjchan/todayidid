@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { findTags, removeTags } from "../utils/string";
+import { Button } from "./button";
 
 const Form = styled.form`
   display: flex;
@@ -58,7 +59,7 @@ export default class Input extends Component {
             value={this.state.value}
             onChange={this.handleChange}
           />
-          <button type='submit'>SUBMIT</button>
+          <Button type='submit'>SUBMIT</Button>
         </div>
       </Form>
     );

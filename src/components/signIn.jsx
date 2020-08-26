@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Container } from "./container";
+import { Button } from "./button";
 import { auth, signInUser, signOut } from "../services/Firestore";
 
 const SignIn = ({ currentUser, updateUser }) => {
@@ -11,13 +12,13 @@ const SignIn = ({ currentUser, updateUser }) => {
   return (
     <Container style={{ marginTop: 0, marginBottom: 0 }}>
       {currentUser ? (
-        <button type='button' onClick={signOut}>
+        <Button type='button' onClick={signOut}>
           SIGN OUT
-        </button>
+        </Button>
       ) : (
-        <button type='button' onClick={signInUser}>
+        <Button type='button' onClick={signInUser}>
           SIGN IN
-        </button>
+        </Button>
       )}
     </Container>
   );
