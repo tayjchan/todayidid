@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getAllTasks } from "../services/Firestore";
 import Loader from "./loader";
 import Tag from "./tag";
+import Delete from "./delete";
 
 const Previously = styled.h2`
   margin-top: 0;
@@ -47,6 +48,7 @@ const Summary = ({ clearCurrentTasks }) => {
       return (
         <li key={task.id}>
           <b>{`${task.time}: `}</b>
+          <Delete taskId={task.id} />
           {task.tags &&
             task.tags.map((tag, index) => (
               <Tag
