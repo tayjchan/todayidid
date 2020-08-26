@@ -7,6 +7,10 @@ export default class Header extends Component {
   };
 
   render() {
-    return <h1 style={{ marginBottom: 0 }}>{this.props.text}</h1>;
+    return (
+      <h1 style={{ marginBottom: 0, textAlign: "center" }}>
+        {this.props.text}
+      </h1>
+    );
   }
 }

@@ -19,9 +19,18 @@ const TagText = styled.span`
   vertical-align: middle;
 `;
 
-const Tag = ({ text, color, onClick }) => {
+const Tag = ({ text, onClick, active, disabled }) => {
   return (
-    <TagContainer onClick={onClick} style={{ backgroundColor: color }}>
+    <TagContainer
+      onClick={onClick}
+      style={{
+        backgroundColor: disabled
+          ? "powderblue"
+          : active
+          ? "lightpink"
+          : "lightgrey",
+      }}
+    >
       <TagText>{text}</TagText>
     </TagContainer>
   );

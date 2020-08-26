@@ -21,24 +21,24 @@ const PreviouslyTasks = styled.ul`
 const Summary = ({ clearCurrentTasks }) => {
   const [savedTasks, setSavedTasks] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [filter, setFilter] = useState();
+  const [filters, setFilters] = useState({});
 
   const filterCurrentTasks = (tag) => {
-    setFilter(tag);
-  };
-
-  const clearCurrentFilter = () => {
-    setFilter(null);
+    const updatedFilters = { ...filters, [tag]: !filters[tag] };
+    setFilters(updatedFilters);
   };
 
   const displayTasks = (savedTasks) => {
     let filteredTasks = [...savedTasks];
-    if (filter) {
+
+    const enabledTags = Object.keys(filters).filter((x) => filters[x]);
+    if (enabledTags.length > 0) {
       filteredTasks = savedTasks.filter((savedTask) => {
         if (!savedTask.tags) {
           return false;
         } else {
-          return savedTask.tags.includes(filter);
+          const enabledTags = Object.keys(filters).filter((x) => filters[x]);
+          return savedTask.tags.some((tag) => enabledTags.includes(tag));
         }
       });
     }
@@ -52,8 +52,8 @@ const Summary = ({ clearCurrentTasks }) => {
               <Tag
                 key={`previously_${tag}_${index}`}
                 text={tag}
-                color='lightpink'
                 onClick={() => filterCurrentTasks(tag)}
+                active={enabledTags.length !== 0}
               />
             ))}
           {task.description}
@@ -69,15 +69,26 @@ const Summary = ({ clearCurrentTasks }) => {
       let sorted = [...tasks].sort((a, b) =>
         new Date(a.time) > new Date(b.time) ? -1 : 1
       );
+
+      // Only show tasks from the past month
       let today = new Date();
       today.setMonth(today.getMonth() - 1);
-
       const index = sorted.findIndex((value) => new Date(value.time) < today);
       if (index !== -1) {
         sorted = sorted.slice(0, index);
       }
 
+      const availableTags = {};
+      sorted.forEach((task) => {
+        if (task.tags) {
+          task.tags.forEach((taskTag) => {
+            availableTags[taskTag] = false;
+          });
+        }
+      });
+
       setSavedTasks(sorted);
+      setFilters(availableTags);
       clearCurrentTasks();
       setLoader(false);
     }
@@ -87,12 +98,17 @@ const Summary = ({ clearCurrentTasks }) => {
   return (
     <Container>
       <Previously>Previously</Previously>
-      {filter && (
-        <div>
-          <span>Filter: </span>
-          <Tag text={filter} color='lightpink' onClick={clearCurrentFilter} />
-        </div>
-      )}
+      <div>
+        <span>Filters: </span>
+        {Object.keys(filters).map((filter, index) => (
+          <Tag
+            key={`filters_${filter}_${index}`}
+            text={filter}
+            active={filters[filter]}
+            onClick={() => filterCurrentTasks(filter)}
+          />
+        ))}
+      </div>
       <PreviouslyTasks>{displayTasks(savedTasks)}</PreviouslyTasks>
       {loader && <Loader />}
     </Container>
