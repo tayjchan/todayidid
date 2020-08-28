@@ -34,12 +34,16 @@ async function addTask(task) {
       time: task.datetime,
       tags: task.tags,
     })
-    .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-    })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
+}
+
+async function deleteTask(taskId) {
+  await firestore
+    .collection("tasks")
+    .doc(taskId)
+    .delete();
 }
 
 function signInUser() {
@@ -60,4 +64,4 @@ function signOut() {
     });
 }
 
-export { auth, getAllTasks, addTask, signInUser, signOut };
+export { auth, getAllTasks, addTask, deleteTask, signInUser, signOut };

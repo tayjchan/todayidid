@@ -29,6 +29,7 @@ const Tag = ({ text, onClick, active, disabled }) => {
           : active
           ? "lightpink"
           : "lightgrey",
+        cursor: disabled ? "default" : "pointer",
       }}
     >
       <TagText>{text}</TagText>

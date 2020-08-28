@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getAllTasks } from "../services/Firestore";
 import Loader from "./loader";
 import Tag from "./tag";
+import Delete from "./delete";
 
 const Previously = styled.h2`
   margin-top: 0;
@@ -47,6 +48,7 @@ const Summary = ({ clearCurrentTasks }) => {
       return (
         <li key={task.id}>
           <b>{`${task.time}: `}</b>
+          <Delete taskId={task.id} refresh={fetchData} />
           {task.tags &&
             task.tags.map((tag, index) => (
               <Tag
@@ -62,36 +64,37 @@ const Summary = ({ clearCurrentTasks }) => {
     });
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoader(true);
-      let tasks = await getAllTasks();
-      let sorted = [...tasks].sort((a, b) =>
-        new Date(a.time) > new Date(b.time) ? -1 : 1
-      );
+  const fetchData = async () => {
+    setLoader(true);
+    let tasks = await getAllTasks();
+    let sorted = [...tasks].sort((a, b) =>
+      new Date(a.time) > new Date(b.time) ? -1 : 1
+    );
 
-      // Only show tasks from the past month
-      let today = new Date();
-      today.setMonth(today.getMonth() - 1);
-      const index = sorted.findIndex((value) => new Date(value.time) < today);
-      if (index !== -1) {
-        sorted = sorted.slice(0, index);
-      }
-
-      const availableTags = {};
-      sorted.forEach((task) => {
-        if (task.tags) {
-          task.tags.forEach((taskTag) => {
-            availableTags[taskTag] = false;
-          });
-        }
-      });
-
-      setSavedTasks(sorted);
-      setFilters(availableTags);
-      clearCurrentTasks();
-      setLoader(false);
+    // Only show tasks from the past month
+    let today = new Date();
+    today.setMonth(today.getMonth() - 1);
+    const index = sorted.findIndex((value) => new Date(value.time) < today);
+    if (index !== -1) {
+      sorted = sorted.slice(0, index);
     }
+
+    const availableTags = {};
+    sorted.forEach((task) => {
+      if (task.tags) {
+        task.tags.forEach((taskTag) => {
+          availableTags[taskTag] = false;
+        });
+      }
+    });
+
+    setSavedTasks(sorted);
+    setFilters(availableTags);
+    clearCurrentTasks();
+    setLoader(false);
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -100,16 +103,18 @@ const Summary = ({ clearCurrentTasks }) => {
       <Previously>Previously</Previously>
       <div>
         <span>Filters: </span>
-        {Object.keys(filters).map((filter, index) => (
-          <Tag
-            key={`filters_${filter}_${index}`}
-            text={filter}
-            active={filters[filter]}
-            onClick={() => filterCurrentTasks(filter)}
-          />
-        ))}
+        {Object.keys(filters)
+          .sort()
+          .map((filter, index) => (
+            <Tag
+              key={`filters_${filter}_${index}`}
+              text={filter}
+              active={filters[filter]}
+              onClick={() => filterCurrentTasks(filter)}
+            />
+          ))}
       </div>
-      <PreviouslyTasks>{displayTasks(savedTasks)}</PreviouslyTasks>
+      {!loader && <PreviouslyTasks>{displayTasks(savedTasks)}</PreviouslyTasks>}
       {loader && <Loader />}
     </Container>
   );
