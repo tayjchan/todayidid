@@ -19,8 +19,12 @@ const Modal = ({ open, onContinue, onClose }) => {
           }}
         >
           <p>Are you sure you want to delete this task?</p>
-          <Button onClick={() => onClose()}>No</Button>
-          <Button>Yes</Button>
+          <div>
+            <Button onClick={() => onClose()} style={{ marginRight: 16 }}>
+              No
+            </Button>
+            <Button onClick={() => onContinue()}>Yes</Button>
+          </div>
         </div>
         <div
           onClick={() => onClose()}

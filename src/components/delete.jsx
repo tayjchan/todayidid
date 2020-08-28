@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Modal from "./modal";
+import { deleteTask } from "../services/Firestore";
 
-const Delete = ({ taskId }) => {
+const Delete = ({ taskId, refresh }) => {
   const [openModal, setOpenModal] = useState(false);
+
+  const onContinue = async () => {
+    setOpenModal(false);
+
+    await deleteTask(taskId);
+    await refresh();
+  };
+
   return (
     <>
       <DeleteIcon
@@ -15,7 +24,11 @@ const Delete = ({ taskId }) => {
         }}
         onClick={() => setOpenModal(!openModal)}
       />
-      <Modal open={openModal} onClose={() => setOpenModal(false)} />
+      <Modal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onContinue={onContinue}
+      />
     </>
   );
 };
